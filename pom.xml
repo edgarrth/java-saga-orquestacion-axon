@@ -6,7 +6,6 @@
     <artifactId>axon-saga-orchestration-poc</artifactId>
     <version>1.0.0</version>
     <name>Axon Saga Orchestration PoC</name>
-    <description>Payment processing Saga orchestration with Axon Framework without Axon Server</description>
 
     <properties>
         <java.version>25</java.version>
