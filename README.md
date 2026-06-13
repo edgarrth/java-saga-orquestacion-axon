@@ -55,7 +55,7 @@ infraestructura
 └── datasets           # Scripts de datos iniciales
 ```
 
-## Decisión técnica
+## Datos de axon
 
 Axon Server está deshabilitado:
 
@@ -206,4 +206,4 @@ Incluye clientes simulados:
 
 ## Notas
 
-Esta PoC usa Kafka como broker de integración externa para publicar eventos de pago, pero la orquestación principal la maneja Axon mediante Saga y Event Store en PostgreSQL.
+Se Kafka como broker de integración externa para publicar eventos de pago, pero la orquestación principal la maneja Axon mediante Saga y Event Store en PostgreSQL.
