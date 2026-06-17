@@ -1,0 +1,9 @@
+POST http://localhost:8080/payments/v1/payments
+Content-Type: application/json
+
+{
+  "customerId": "CUST-001",
+  "merchantId": "MERCH-001",
+  "amount": 120.50,
+  "currency": "PEN"
+}
