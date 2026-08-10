@@ -89,20 +89,6 @@ Servicios:
 - Kafka UI: `http://localhost:8081`
 - Kafka interno entre contenedores: `kafka:19092`
 
-### Si ejecutaste una versión anterior del compose
-
-La versión corregida usa un volumen nuevo (`postgres_data_v2`). Esto evita reutilizar el volumen anterior que pudo quedar inicializado sin la base `payments`.
-
-Ejecuta una vez:
-
-```bash
-cd infraestructura/docker
-docker compose down --remove-orphans
-docker compose up -d
-```
-
-No es necesario ejecutar `down -v` para corregir este problema. El volumen anterior queda intacto y puedes eliminarlo manualmente más adelante si ya no lo necesitas.
-
 ## Verificar infraestructura
 
 ```bash
@@ -155,12 +141,6 @@ DB_USER=payments \
 DB_PASSWORD=payments \
 KAFKA_BOOTSTRAP_SERVERS=localhost:9092 \
 mvn spring-boot:run
-```
-
-O importar el proyecto en IntelliJ IDEA y ejecutar:
-
-```text
-com.edgarrt.poc.payments.PaymentApplication
 ```
 
 Flyway ejecutará:
