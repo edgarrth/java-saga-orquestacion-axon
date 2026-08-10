@@ -12,6 +12,7 @@ public class PaymentKafkaPublisher {
     @EventHandler public void on(PaymentCreatedEvent e) { publish(e.paymentId(), e); }
     @EventHandler public void on(FundsReservedEvent e) { publish(e.paymentId(), e); }
     @EventHandler public void on(FraudApprovedEvent e) { publish(e.paymentId(), e); }
+    @EventHandler public void on(FundsReservationFailedEvent e) { publish(e.paymentId(), e); }
     @EventHandler public void on(FraudRejectedEvent e) { publish(e.paymentId(), e); }
     @EventHandler public void on(FundsReleasedEvent e) { publish(e.paymentId(), e); }
     @EventHandler public void on(PaymentCapturedEvent e) { publish(e.paymentId(), e); }

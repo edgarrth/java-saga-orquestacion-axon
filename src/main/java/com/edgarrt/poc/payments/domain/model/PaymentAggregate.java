@@ -81,7 +81,7 @@ public class PaymentAggregate {
     @EventSourcingHandler
     public void on(FraudRejectedEvent event) { this.status = PaymentStatus.FRAUD_REJECTED; }
     @EventSourcingHandler
-    public void on(FundsReleasedEvent event) { this.status = PaymentStatus.CANCELLED; }
+    public void on(FundsReleasedEvent event) { this.status = PaymentStatus.FUNDS_RELEASED; }
     @EventSourcingHandler
     public void on(PaymentCapturedEvent event) { this.status = PaymentStatus.CAPTURED; }
     @EventSourcingHandler

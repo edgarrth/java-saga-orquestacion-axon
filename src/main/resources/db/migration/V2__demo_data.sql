@@ -1,11 +1,3 @@
--- Dataset manual de referencia.
--- El docker-compose NO ejecuta este archivo. La fuente de verdad para el arranque
--- es Flyway: src/main/resources/db/migration/V2__demo_data.sql.
-
--- Dataset de referencia para la PoC.
--- La aplicación carga estos mismos datos automáticamente mediante
--- src/main/resources/db/migration/V2__demo_data.sql.
-
 INSERT INTO customer_funds(customer_id, available_balance, reserved_balance)
 VALUES ('CUST-001', 10000.00, 0.00),
        ('CUST-002', 500.00, 0.00),

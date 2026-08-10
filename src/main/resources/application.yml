@@ -2,12 +2,17 @@ spring:
   application:
     name: axon-saga-orchestration-poc
   datasource:
-    url: jdbc:postgresql://localhost:5432/payments
-    username: payments
-    password: payments
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/payments}
+    username: ${DB_USER:payments}
+    password: ${DB_PASSWORD:payments}
     driver-class-name: org.postgresql.Driver
+    hikari:
+      connection-timeout: 10000
+      validation-timeout: 5000
   jpa:
     hibernate:
+      # Axon JPA fallback necesita crear sus tablas internas del Event Store,
+      # Saga Store y Tracking Tokens. Flyway administra las tablas de negocio.
       ddl-auto: update
     properties:
       hibernate:
@@ -16,8 +21,10 @@ spring:
   flyway:
     enabled: true
     locations: classpath:db/migration
+    connect-retries: 10
+    connect-retries-interval: 2s
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
@@ -33,18 +40,11 @@ axon:
   axonserver:
     enabled: false
   serializer:
-    general: jackson
     events: jackson
     messages: jackson
-  eventhandling:
-    processors:
-      paymentProjection:
-        mode: tracking
-      paymentKafkaPublisher:
-        mode: tracking
 
 server:
-  port: 8080
+  port: ${SERVER_PORT:8080}
 
 management:
   endpoints:

@@ -9,6 +9,7 @@ import jakarta.validation.constraints.*;
 import org.axonframework.commandhandling.gateway.CommandGateway;
 import org.axonframework.messaging.responsetypes.ResponseTypes;
 import org.axonframework.queryhandling.QueryGateway;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
@@ -21,25 +22,42 @@ import java.util.concurrent.CompletableFuture;
 public class PaymentController {
     private final CommandGateway commandGateway;
     private final QueryGateway queryGateway;
-    public PaymentController(CommandGateway commandGateway, QueryGateway queryGateway){this.commandGateway=commandGateway;this.queryGateway=queryGateway;}
+
+    public PaymentController(CommandGateway commandGateway, QueryGateway queryGateway) {
+        this.commandGateway = commandGateway;
+        this.queryGateway = queryGateway;
+    }
 
     @PostMapping
     public CompletableFuture<CreatePaymentResponse> create(@Valid @RequestBody CreatePaymentRequest request) {
         String id = UUID.randomUUID().toString();
-        return commandGateway.send(new CreatePaymentCommand(id, request.customerId(), request.merchantId(), request.amount(), request.currency()))
-                .thenApply(r -> new CreatePaymentResponse(id, "PAYMENT_ORCHESTRATION_STARTED"));
+        return commandGateway
+                .send(new CreatePaymentCommand(id, request.customerId(), request.merchantId(), request.amount(), request.currency()))
+                .thenApply(result -> new CreatePaymentResponse(id, "PAYMENT_ORCHESTRATION_STARTED"));
     }
 
     @GetMapping("/{paymentId}")
-    public CompletableFuture<PaymentView> find(@PathVariable String paymentId) {
-        return queryGateway.query(new FindPaymentByIdQuery(paymentId), ResponseTypes.instanceOf(PaymentView.class));
+    public CompletableFuture<ResponseEntity<PaymentView>> find(
+            @PathVariable("paymentId") String paymentId) {
+        return queryGateway
+                .query(new FindPaymentByIdQuery(paymentId), ResponseTypes.optionalInstanceOf(PaymentView.class))
+                .thenApply(payment -> payment
+                        .map(ResponseEntity::ok)
+                        .orElseGet(() -> ResponseEntity.notFound().build()));
     }
 
     @GetMapping
     public CompletableFuture<List<PaymentView>> list() {
-        return queryGateway.query(new ListPaymentsQuery(), ResponseTypes.multipleInstancesOf(PaymentView.class));
+        return queryGateway.query(
+                new ListPaymentsQuery(),
+                ResponseTypes.multipleInstancesOf(PaymentView.class));
     }
 
-    public record CreatePaymentRequest(@NotBlank String customerId, @NotBlank String merchantId, @DecimalMin("0.01") BigDecimal amount, @Pattern(regexp="PEN|USD") String currency) {}
+    public record CreatePaymentRequest(
+            @NotBlank String customerId,
+            @NotBlank String merchantId,
+            @NotNull @DecimalMin("0.01") BigDecimal amount,
+            @NotBlank @Pattern(regexp = "PEN|USD") String currency) {}
+
     public record CreatePaymentResponse(String paymentId, String status) {}
 }

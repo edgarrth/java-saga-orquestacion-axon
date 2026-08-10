@@ -11,7 +11,6 @@
         <java.version>25</java.version>
         <spring.boot.version>3.5.11</spring.boot.version>
         <axon.version>4.13.1</axon.version>
-        <testcontainers.version>1.21.3</testcontainers.version>
     </properties>
 
     <dependencyManagement>
@@ -94,8 +93,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.14.1</version>
                 <configuration>
                     <release>25</release>
+                    <parameters>true</parameters>
                 </configuration>
             </plugin>
             <plugin>
