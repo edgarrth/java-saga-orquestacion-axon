@@ -9,8 +9,6 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      # v2 evita reutilizar el volumen defectuoso de versiones anteriores,
-      # donde PostgreSQL ya estaba inicializado sin la base "payments".
       - postgres_data_v2:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U payments -d payments"]
